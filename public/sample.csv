@@ -1,0 +1,11 @@
+Product ID,Name,Brand,Category,Price,Color,Size,Material,Description,Stock
+1001,Premium T-Shirt,,Clothing,29.99,Blue,M,Cotton,,50
+1002,,Nike,Footwear,89.99,Black,42,Synthetic,Comfortable running shoes,25
+1003,Wireless Headphones,Sony,Electronics,,Silver,,Plastic,Noise-cancelling wireless headphones,15
+1004,Coffee Maker,Breville,Kitchen,149.99,,,Stainless Steel,,10
+1005,Yoga Mat,Lululemon,Fitness,45.99,Purple,Standard,TPE,Non-slip exercise mat,30
+1006,Desk Lamp,,,24.99,White,Medium,,Adjustable LED desk lamp,20
+1007,Backpack,North Face,Accessories,79.99,,Large,Nylon,Durable hiking backpack,12
+1008,Sunglasses,Ray-Ban,Accessories,129.99,Black,,,Polarized UV protection sunglasses,8
+1009,Water Bottle,Hydro Flask,Kitchen,34.99,Blue,24oz,Stainless Steel,,40
+1010,Smart Watch,Apple,Electronics,399.99,Space Gray,44mm,,GPS + Cellular capability,5
