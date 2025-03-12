@@ -7,7 +7,7 @@
 }
 
 body {
-  font-family: var(--font-noto-sans-mono), monospace;
+  /* font-family: var(--font-noto-sans-mono), monospace; */
   color: var(--foreground);
 }
 
@@ -20,6 +20,6 @@ body {
 
 body {
   background: var(--background);
-  font-family: var(--font-noto-sans-mono), monospace;
+  /* font-family: var(--font-noto-sans-mono), monospace; */
   color: var(--foreground);
 }
