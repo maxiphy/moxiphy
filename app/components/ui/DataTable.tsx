@@ -3,13 +3,12 @@
 import { useState } from 'react';
 
 interface DataTableProps {
-  data: any[];
-  fileName: string;
+  data: Record<string, string | number | boolean | null>[];
 }
 
-export default function DataTable({ data, fileName }: DataTableProps) {
+export default function DataTable({ data }: DataTableProps) {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const rowsPerPage = 10;
 
   // If no data, show empty state
   if (!data || data.length === 0) {
@@ -67,14 +66,15 @@ export default function DataTable({ data, fileName }: DataTableProps) {
                   >
                     {header === 'imageThumb' && row[header] ? (
                       <div className="flex items-center">
+                        {/* Using img directly for simplicity, consider using next/image in production */}
                         <img 
-                          src={row[header]} 
-                          alt={row['imageAlt'] || 'Product image'} 
+                          src={String(row[header])} 
+                          alt={String(row['imageAlt'] || 'Product image')} 
                           className="h-10 w-10 object-cover rounded-md"
-                          title={row['imageCredit'] || ''}
+                          title={String(row['imageCredit'] || '')}
                         />
                         <span className="ml-2 text-xs text-gray-400 truncate max-w-xs">
-                          {row['imageCredit'] ? `Credit: ${row['imageCredit'].split(' (')[0]}` : ''}
+                          {row['imageCredit'] ? `Credit: ${String(row['imageCredit']).split(' (')[0]}` : ''}
                         </span>
                       </div>
                     ) : header === 'imageUrl' || header === 'imageAlt' || header === 'imageCredit' ? (

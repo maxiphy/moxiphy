@@ -115,7 +115,7 @@ const PinInput: React.FC<PinInputProps> = ({ length, onComplete, error = false }
           onChange={e => handleChange(e, index)}
           onKeyDown={e => handleKeyDown(e, index)}
           onPaste={handlePaste}
-          className={`w-12 h-14 text-center text-2xl font-bold border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008DC1] ${
+          className={`w-12 h-14 text-center text-2xl font-bold border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008DC1] text-gray-900 ${
             error ? 'border-red-500' : 'border-gray-300'
           }`}
           autoComplete="off"

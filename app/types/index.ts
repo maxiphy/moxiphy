@@ -1,6 +1,6 @@
 // CSV Data Types
 export interface CSVRow {
-  [key: string]: string;
+  [key: string]: string | number | boolean | null;
 }
 
 export interface CSVData {
@@ -38,7 +38,6 @@ export interface FileUploadProps {
 
 export interface DataTableProps {
   data: CSVRow[];
-  fileName: string;
 }
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -57,11 +56,11 @@ export interface ProcessingStatus {
 
 // CSV Enrichment Types
 export interface EnrichedCSVRow extends Omit<CSVRow, 'imageUrl' | 'imageThumb' | 'imageAlt' | 'imageCredit'> {
-  [key: string]: string;
   imageUrl: string;
   imageThumb: string;
   imageAlt: string;
   imageCredit: string;
+  [key: string]: string | number | boolean | null;
 }
 
 export interface CSVEnrichmentState {

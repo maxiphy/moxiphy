@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
-    const { csvData, headers, rowIndices } = await request.json();
+    const { csvData, headers, rowIndices, columnConstraints } = await request.json();
 
     if (!csvData || !Array.isArray(csvData) || csvData.length === 0) {
       return NextResponse.json(
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Create a prompt for OpenAI
-    const prompt = createBatchPrompt(rowsWithMissingFields, headers);
+    const prompt = createBatchPrompt(rowsWithMissingFields, headers, columnConstraints);
     
     // Call OpenAI directly from the route
     const response = await openai.chat.completions.create({
@@ -130,7 +130,8 @@ export async function POST(request: NextRequest) {
 // Helper function to create a batch prompt
 function createBatchPrompt(
   rowsData: Array<{row: Record<string, string>, index: number, missingFields: string[], existingData: Record<string, string>}>,
-  headers: string[]
+  headers: string[],
+  columnConstraints?: Array<{columnName: string, enumValues?: string[], description?: string}>
 ): string {
   const rowPrompts = rowsData.map((rowData, i) => {
     const { index, existingData, missingFields } = rowData;
@@ -144,7 +145,33 @@ function createBatchPrompt(
            `Missing fields to complete:\n${missingFields.join(', ')}\n`;
   }).join('\n----------\n\n');
   
-  return `I have a CSV file with the following columns:\n${headers.join(', ')}\n\n` +
+  // Build constraint information if available
+  let constraintInfo = '';
+  if (columnConstraints && columnConstraints.length > 0) {
+    const relevantConstraints = columnConstraints.filter(c => 
+      c.enumValues?.length || c.description
+    );
+    
+    if (relevantConstraints.length > 0) {
+      constraintInfo = '\nIMPORTANT COLUMN CONSTRAINTS:\n';
+      
+      relevantConstraints.forEach(constraint => {
+        constraintInfo += `- ${constraint.columnName}: `;
+        
+        if (constraint.description) {
+          constraintInfo += constraint.description;
+        }
+        
+        if (constraint.enumValues && constraint.enumValues.length > 0) {
+          constraintInfo += ` [MUST be one of these values: ${constraint.enumValues.join(', ')}]`;
+        }
+        
+        constraintInfo += '\n';
+      });
+    }
+  }
+
+  return `I have a CSV file with the following columns:\n${headers.join(', ')}${constraintInfo}\n\n` +
          `Please complete the missing fields for ${rowsData.length} rows:\n\n${rowPrompts}\n\n` +
          `IMPORTANT: Respond with a valid JSON array of objects. Each object MUST have these two properties:\n` +
          `1. "rowIndex": (number) The index of the row as provided in the request\n` +

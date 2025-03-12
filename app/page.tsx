@@ -9,6 +9,10 @@ import { hasMissingValues } from "./lib/csvUtils";
 import useCSVEnrichment from "./hooks/useCSVEnrichment";
 import { useAuth } from "./context/AuthContext";
 import Login from "./components/Login";
+import Link from "next/link";
+import { useState } from "react";
+import { PlusIcon, AdjustmentsHorizontalIcon } from "@heroicons/react/24/outline";
+import ColumnConstraintsEditor from "./components/ColumnConstraintsEditor";
 
 export default function Home() {
   const { isAuthenticated, logout } = useAuth();
@@ -19,12 +23,16 @@ export default function Home() {
     isEnrichingImages,
     hasImages,
     processingProgress,
+    columnConstraints,
     handleFileLoaded,
     handleError,
     handleCompleteData,
     handleEnrichImages,
-    handleDownload
+    handleDownload,
+    setColumnConstraints
   } = useCSVEnrichment();
+  
+  const [showConstraintsEditor, setShowConstraintsEditor] = useState(false);
 
   // If not authenticated, show login screen
   if (!isAuthenticated) {
@@ -50,6 +58,9 @@ export default function Home() {
               >
                 Download Sample CSV
               </a>
+              <Link href="/generate" className="text-sm text-[#008DC1] hover:text-[#007aa8] underline">
+                Generate Mock Data
+              </Link>
               <button
                 onClick={logout}
                 className="text-sm text-gray-600 hover:text-gray-900"
@@ -63,13 +74,21 @@ export default function Home() {
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-8">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="flex flex-col items-center mb-8">
           <h2 className="text-xl font-extrabold text-gray-900 sm:text-3xl">
             CSV Completion & Enrichment Tool
           </h2>
           <p className="mt-2 text-sm text-gray-500">
             Upload your CSV file, complete missing data with AI, and enrich with images
           </p>
+          <div className="mt-4">
+            <Link href="/generate">
+              <Button variant="secondary" className="flex items-center">
+                <PlusIcon className="h-4 w-4 mr-2" />
+                Generate New Mock Data
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {/* Main Content */}
@@ -109,6 +128,14 @@ export default function Home() {
                     </Button>
                     <Button
                       variant="outline"
+                      onClick={() => setShowConstraintsEditor(true)}
+                      disabled={!csvData || isProcessing || isEnrichingImages}
+                    >
+                      <AdjustmentsHorizontalIcon className="h-4 w-4 mr-2" />
+                      Column Constraints
+                    </Button>
+                    <Button
+                      variant="outline"
                       onClick={handleDownload}
                       disabled={!csvData || isProcessing || isEnrichingImages}
                     >
@@ -135,8 +162,21 @@ export default function Home() {
               
               {/* Table Preview Component */}
               <div className="mt-4">
-                <DataTable data={csvData} fileName={fileName} />
+                <DataTable data={csvData} />
               </div>
+              
+              {/* Column Constraints Editor Modal */}
+              {showConstraintsEditor && csvData && csvData.length > 0 && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                  <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                    <ColumnConstraintsEditor
+                      csvHeaders={Object.keys(csvData[0])}
+                      onConstraintsChange={setColumnConstraints}
+                      onClose={() => setShowConstraintsEditor(false)}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -3,9 +3,10 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Papa from 'papaparse';
+import { CSVRow } from '../../types';
 
 interface FileUploadProps {
-  onFileLoaded: (data: any[], fileName: string) => void;
+  onFileLoaded: (data: CSVRow[], fileName: string) => void;
   onError: (error: string) => void;
 }
 
@@ -37,7 +38,17 @@ export default function FileUpload({ onFileLoaded, onError }: FileUploadProps) {
         if (results.errors.length > 0) {
           onError(`Error parsing CSV: ${results.errors[0].message}`);
         } else {
-          onFileLoaded(results.data, file.name);
+          // Convert the parsed data to CSVRow type
+          const typedData = results.data.map((row: unknown) => {
+            const typedRow: CSVRow = {};
+            if (row && typeof row === 'object') {
+              Object.entries(row as Record<string, unknown>).forEach(([key, value]) => {
+                typedRow[key] = value as string | number | boolean | null;
+              });
+            }
+            return typedRow;
+          });
+          onFileLoaded(typedData, file.name);
         }
         setIsUploading(false);
       },

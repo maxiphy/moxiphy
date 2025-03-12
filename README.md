@@ -15,6 +15,8 @@ With Moxiphy, you can transform incomplete CSV datasets into rich, detailed prod
 - **CSV Upload**: Drag and drop or select CSV files for processing
 - **Data Visualization**: View your CSV data in a paginated table format
 - **AI-Powered Completion**: Automatically fill in missing data fields using OpenAI
+- **Column Constraints**: Define enum values and descriptions to guide AI when completing data
+- **Mock Data Generation**: Create sample CSV data with custom column definitions
 - **Image Enrichment**: Fetch relevant images for products based on their details
 - **CSV Export**: Download the completed and enriched CSV file
 - **Secure Access**: PIN-protected access for team members only
@@ -86,12 +88,24 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Usage
 
+### CSV Completion & Enrichment
+
 1. **Access the application**: Enter the 6-digit PIN to access the protected application
 2. **Upload a CSV file**: Drag and drop a CSV file or click to select one
 3. **Review the data**: The CSV data will be displayed in a table format
-4. **Complete missing data**: Click the "Complete Data" button to fill in missing fields using AI
-5. **Enrich with images**: Click the "Enrich with Images" button to add relevant product images
-6. **Download the enriched CSV**: Click the "Download CSV" button to get your completed file
+4. **Define column constraints (optional)**: Click the "Column Constraints" button to specify enum values and descriptions for columns
+5. **Complete missing data**: Click the "Complete Data" button to fill in missing fields using AI
+6. **Enrich with images**: Click the "Enrich with Images" button to add relevant product images
+7. **Download the enriched CSV**: Click the "Download CSV" button to get your completed file
+
+### Mock Data Generation
+
+1. **Navigate to Generate page**: Click the "Generate Mock Data" link in the navigation
+2. **Define columns**: Add columns with names, types, and other properties
+3. **Set enum values**: For enum-type columns, define the allowed values
+4. **Specify row count**: Set the number of rows to generate (1-100)
+5. **Generate data**: Click the "Generate Data" button to create mock CSV data
+6. **Download CSV**: Click the "Download CSV" button to save the generated data
 
 ## Sample Data
 

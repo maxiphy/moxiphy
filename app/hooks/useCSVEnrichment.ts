@@ -5,6 +5,12 @@ import { CSVRow } from '../types';
 import { hasMissingValues, downloadCSV } from '../lib/csvUtils';
 import { batchEnrichProductsWithImages } from '../lib/imageUtils';
 
+export interface ColumnConstraint {
+  columnName: string;
+  enumValues?: string[];
+  description?: string;
+}
+
 interface UseCSVEnrichmentProps {
   onProgress?: (progress: number) => void;
 }
@@ -16,12 +22,14 @@ interface UseCSVEnrichmentReturn {
   isEnrichingImages: boolean;
   hasImages: boolean;
   processingProgress: number;
+  columnConstraints: ColumnConstraint[];
   handleFileLoaded: (data: CSVRow[], name: string) => void;
   handleError: (error: string) => void;
   handleCompleteData: () => Promise<void>;
   handleEnrichImages: () => Promise<void>;
   handleDownload: () => void;
   resetData: () => void;
+  setColumnConstraints: (constraints: ColumnConstraint[]) => void;
 }
 
 export default function useCSVEnrichment({ 
@@ -33,6 +41,7 @@ export default function useCSVEnrichment({
   const [fileName, setFileName] = useState<string>('');
   const [processingProgress, setProcessingProgress] = useState(0);
   const [hasImages, setHasImages] = useState(false);
+  const [columnConstraints, setColumnConstraints] = useState<ColumnConstraint[]>([]);
 
   // Update progress and notify parent component if callback provided
   const updateProgress = (progress: number) => {
@@ -47,6 +56,18 @@ export default function useCSVEnrichment({
     setCsvData(data);
     setFileName(name);
     setHasImages(false);
+    
+    // Initialize column constraints based on headers
+    if (data.length > 0) {
+      const headers = Object.keys(data[0]);
+      const initialConstraints = headers.map(header => ({
+        columnName: header,
+        enumValues: undefined,
+        description: ''
+      }));
+      setColumnConstraints(initialConstraints);
+    }
+    
     toast.success(`File uploaded: ${name}`);
   };
 
@@ -61,6 +82,7 @@ export default function useCSVEnrichment({
     setFileName('');
     setProcessingProgress(0);
     setHasImages(false);
+    setColumnConstraints([]);
   };
 
   // Handle data completion
@@ -123,7 +145,8 @@ export default function useCSVEnrichment({
           body: JSON.stringify({ 
             csvData: batchData, 
             headers,
-            rowIndices: batchIndices // Pass the original indices so the API can return them correctly
+            rowIndices: batchIndices, // Pass the original indices so the API can return them correctly
+            columnConstraints // Pass column constraints to guide AI completion
           }),
         });
 
@@ -183,9 +206,7 @@ export default function useCSVEnrichment({
     toast.loading('Fetching images...', { id: 'enriching' });
 
     try {
-      // Calculate total number of products
-      const totalProducts = csvData.length;
-      let processedProducts = 0;
+      // Process all products in the CSV data
 
       // Process in batches of 3 to avoid rate limiting
       const enrichedData = await batchEnrichProductsWithImages(csvData, 3);
@@ -226,11 +247,13 @@ export default function useCSVEnrichment({
     isEnrichingImages,
     hasImages,
     processingProgress,
+    columnConstraints,
     handleFileLoaded,
     handleError,
     handleCompleteData,
     handleEnrichImages,
     handleDownload,
-    resetData
+    resetData,
+    setColumnConstraints
   };
 }

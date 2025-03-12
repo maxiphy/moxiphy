@@ -1,4 +1,5 @@
-import { createApi } from 'unsplash-js';
+// Import types
+import { CSVRow } from '../types';
 
 // Define image result interface
 export interface ImageResult {
@@ -45,20 +46,20 @@ export async function fetchImagesFromAPI(query: string): Promise<ImageResult[]> 
  * @param product Object containing product details
  * @returns A search query string
  */
-export function generateImageSearchQuery(product: Record<string, string>): string {
+export function generateImageSearchQuery(product: CSVRow): string {
   // Log the product object to debug what fields are available
   console.log('Product data for image search:', JSON.stringify(product));
   
   // Check for Name field first
-  if (product['Name'] && product['Name'].trim() !== '') {
-    const query = product['Name'].trim();
+  if (product['Name'] && typeof product['Name'] === 'string' && product['Name'].trim() !== '') {
+    const query = String(product['Name']).trim();
     console.log(`Generated query from Name: "${query}"`);
     return query;
   }
   
   // Check for title field as an alternative
-  if (product['title'] && product['title'].trim() !== '') {
-    const query = product['title'].trim();
+  if (product['title'] && typeof product['title'] === 'string' && product['title'].trim() !== '') {
+    const query = String(product['title']).trim();
     console.log(`Generated query from title: "${query}"`);
     return query;
   }
@@ -74,8 +75,8 @@ export function generateImageSearchQuery(product: Record<string, string>): strin
  * @returns Promise resolving to products with image URLs
  */
 export async function enrichProductsWithImages(
-  products: Record<string, string>[]
-): Promise<Record<string, string>[]> {
+  products: CSVRow[]
+): Promise<CSVRow[]> {
   const enrichedProducts = [...products];
   
   // Process each product
@@ -110,9 +111,9 @@ export async function enrichProductsWithImages(
  * @returns Promise resolving to products with image URLs
  */
 export async function batchEnrichProductsWithImages(
-  products: Record<string, string>[],
+  products: CSVRow[],
   batchSize = 3
-): Promise<Record<string, string>[]> {
+): Promise<CSVRow[]> {
   const results = [...products];
   // Keep track of used image IDs to prevent duplicates
   const usedImageIds = new Set<string>();
