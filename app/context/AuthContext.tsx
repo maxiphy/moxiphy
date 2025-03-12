@@ -3,7 +3,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // The PIN should be a 6-digit number
-const CORRECT_PIN = process.env.NEXT_PUBLIC_ACCESS_PIN || "123456";
+// Using a more secure default PIN that's not easily guessable
+const CORRECT_PIN = process.env.NEXT_PUBLIC_ACCESS_PIN || "maxiphy2025";
 
 type AuthContextType = {
   isAuthenticated: boolean;
