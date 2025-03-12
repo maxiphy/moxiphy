@@ -2,11 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createApi } from 'unsplash-js';
 import nodeFetch from 'node-fetch';
 
-// Initialize Unsplash client
-const unsplash = createApi({
-  accessKey: process.env.UNSPLASH_ACCESS_KEY || '',
-  fetch: nodeFetch as unknown as typeof fetch,
-});
+// Initialize Unsplash client with fallback for build-time
+let unsplash: ReturnType<typeof createApi>;
+
+try {
+  unsplash = createApi({
+    accessKey: process.env.UNSPLASH_ACCESS_KEY || '',
+    fetch: nodeFetch as unknown as typeof fetch,
+  });
+} catch (error) {
+  console.error('Error initializing Unsplash client:', error);
+  // Provide a dummy client for build time
+  unsplash = {
+    search: {
+      getPhotos: () => Promise.resolve({ type: 'error', errors: ['API not initialized'] }),
+    },
+  } as unknown as ReturnType<typeof createApi>;
+}
 
 // Helper function to enhance search queries for better image results
 function enhanceSearchQuery(query: string): string {

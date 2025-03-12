@@ -4,7 +4,8 @@ import OpenAI from 'openai';
 
 // Initialize OpenAI client directly in the route for more control
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || '',
+  dangerouslyAllowBrowser: true // Allow initialization even if API key is missing during build
 });
 
 export async function POST(request: NextRequest) {

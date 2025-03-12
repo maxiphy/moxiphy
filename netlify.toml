@@ -1,0 +1,21 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Handle API routes as serverless functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# Fallback for client-side routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
