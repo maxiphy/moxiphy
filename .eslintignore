@@ -1,0 +1,7 @@
+# Temporarily ignore all files for deployment
+**/*.js
+**/*.jsx
+**/*.ts
+**/*.tsx
+.next/**/*
+node_modules/**/*

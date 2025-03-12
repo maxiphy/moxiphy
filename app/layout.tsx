@@ -6,6 +6,8 @@ const notoSansMono = Noto_Sans_Mono({
   variable: "--font-noto-sans-mono",
   subsets: ["latin"],
   weight: ["400", "700"],
+  display: 'swap',
+  preload: true
 });
 
 export const metadata: Metadata = {
@@ -23,10 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${notoSansMono.variable} antialiased`}
-      >
+    <html lang="en" className={notoSansMono.variable}>
+      <body className="font-sans antialiased">
         <AuthProvider>
           {children}
         </AuthProvider>

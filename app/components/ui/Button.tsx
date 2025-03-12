@@ -16,7 +16,7 @@ export default function Button({
   disabled,
   ...props
 }: ButtonProps) {
-  const baseStyles = "inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#008DC1] disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseStyles = "inline-flex items-center justify-center px-3 py-1.5 border text-xs font-medium rounded-md shadow-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#008DC1] disabled:opacity-50 disabled:cursor-not-allowed";
   
   const variantStyles = {
     primary: "border-transparent text-white bg-[#008DC1] hover:bg-[#007aa8]",

@@ -225,7 +225,7 @@ function repairTruncatedJson(jsonString: string): string {
 function parseCompletionResponse(content: string): Array<{rowIndex: number, fields: Record<string, string>}> {
   try {
     // Clean up the content - remove any text before or after the JSON array
-    let cleanedContent = content.trim();
+    const cleanedContent = content.trim();
     
     // Extract JSON from the response (it might be wrapped in markdown code blocks)
     const jsonMatch = cleanedContent.match(/```(?:json)?\n([\s\S]*)\n```/) || cleanedContent.match(/```([\s\S]*)```/) || [null, cleanedContent];

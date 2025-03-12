@@ -33,7 +33,7 @@ const MockDataGenerator: React.FC<MockDataGeneratorProps> = ({
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold mb-4">Generate Mock CSV Data</h2>
+      <h2 className="text-xl font-semibold mb-4 text-gray-900">Generate Mock CSV Data</h2>
       
       <form onSubmit={handleSubmit}>
         <div className="mb-4">

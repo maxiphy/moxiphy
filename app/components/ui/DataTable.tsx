@@ -49,7 +49,7 @@ export default function DataTable({ data }: DataTableProps) {
                 <th
                   key={index}
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider"
                 >
                   {header}
                 </th>
@@ -62,7 +62,7 @@ export default function DataTable({ data }: DataTableProps) {
                 {headers.map((header, colIndex) => (
                   <td
                     key={`${rowIndex}-${colIndex}`}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    className="px-4 py-2 whitespace-nowrap text-xs text-gray-600"
                   >
                     {header === 'imageThumb' && row[header] ? (
                       <div className="flex items-center">
@@ -73,12 +73,12 @@ export default function DataTable({ data }: DataTableProps) {
                           className="h-10 w-10 object-cover rounded-md"
                           title={String(row['imageCredit'] || '')}
                         />
-                        <span className="ml-2 text-xs text-gray-400 truncate max-w-xs">
+                        <span className="ml-2 text-xs text-gray-500 truncate max-w-xs">
                           {row['imageCredit'] ? `Credit: ${String(row['imageCredit']).split(' (')[0]}` : ''}
                         </span>
                       </div>
                     ) : header === 'imageUrl' || header === 'imageAlt' || header === 'imageCredit' ? (
-                      <span className="text-gray-400 italic text-xs truncate max-w-xs">
+                      <span className="text-gray-500 italic text-xs truncate max-w-xs">
                         {row[header] ? (header === 'imageUrl' ? 'Image URL available' : row[header]) : 'No image data'}
                       </span>
                     ) : (
@@ -95,26 +95,26 @@ export default function DataTable({ data }: DataTableProps) {
       </div>
 
       {/* Pagination */}
-      <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+      <div className="bg-white px-4 py-2 flex items-center justify-between border-t border-gray-200 sm:px-4">
         <div className="flex-1 flex justify-between sm:hidden">
           <button
             onClick={handlePreviousPage}
             disabled={page === 0}
-            className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="relative inline-flex items-center px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
           >
             Previous
           </button>
           <button
             onClick={handleNextPage}
             disabled={page >= totalPages - 1}
-            className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="ml-2 relative inline-flex items-center px-2 py-1 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
           >
             Next
           </button>
         </div>
         <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm text-gray-700">
+            <p className="text-xs text-gray-700">
               Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
               <span className="font-medium">{endIndex}</span> of{' '}
               <span className="font-medium">{data.length}</span> results
@@ -125,23 +125,23 @@ export default function DataTable({ data }: DataTableProps) {
               <button
                 onClick={handlePreviousPage}
                 disabled={page === 0}
-                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative inline-flex items-center px-1.5 py-1 rounded-l-md border border-gray-300 bg-white text-xs font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="sr-only">Previous</span>
-                <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </button>
-              <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+              <span className="relative inline-flex items-center px-2 py-1 border border-gray-300 bg-white text-xs font-medium text-gray-700 whitespace-nowrap">
                 Page {page + 1} of {totalPages}
               </span>
               <button
                 onClick={handleNextPage}
                 disabled={page >= totalPages - 1}
-                className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="relative inline-flex items-center px-1.5 py-1 rounded-r-md border border-gray-300 bg-white text-xs font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <span className="sr-only">Next</span>
-                <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <svg className="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                 </svg>
               </button>
