@@ -8,11 +8,7 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Handle API routes as serverless functions
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/api/:splat"
-  status = 200
+# Remove the API redirects as Next.js API routes are handled by the Next.js plugin
 
 # Fallback for client-side routing
 [[redirects]]
