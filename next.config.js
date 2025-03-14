@@ -22,12 +22,9 @@ const nextConfig = {
     }
     return config;
   },
-  // Ensure environment variables are available
+  // Only expose public environment variables
   env: {
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY || '',
-    UNSPLASH_ACCESS_KEY: process.env.UNSPLASH_ACCESS_KEY || '',
-    PEXELS_API_KEY: process.env.PEXELS_API_KEY || '',
-    NEXT_PUBLIC_ACCESS_PIN: process.env.NEXT_PUBLIC_ACCESS_PIN || 'maxiphy2025',
+    // No sensitive API keys should be exposed here
   },
 };
 

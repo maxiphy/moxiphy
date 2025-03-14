@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Papa from 'papaparse';
 import toast from 'react-hot-toast';
+import { fetchWithAuth } from '../lib/apiUtils';
 
 interface ColumnDefinition {
   name: string;
@@ -28,8 +29,8 @@ export default function useMockDataGenerator() {
       const fileName = `mock-data-${timestamp}.csv`;
       setGeneratedFileName(fileName);
       
-      // Call the API to generate the data
-      const response = await fetch('/api/generate-mock-data', {
+      // Call the API to generate the data with authentication
+      const response = await fetchWithAuth('/api/generate-mock-data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

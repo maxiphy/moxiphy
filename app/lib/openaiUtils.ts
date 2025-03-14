@@ -1,8 +1,8 @@
 import OpenAI from 'openai';
 
-// Initialize OpenAI client
+// Initialize OpenAI client for server-side use only
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || ''
 });
 
 /**

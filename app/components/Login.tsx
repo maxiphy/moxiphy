@@ -6,12 +6,15 @@ import PinInput from './ui/PinInput';
 import Logo from './ui/Logo';
 
 const Login: React.FC = () => {
-  const { login } = useAuth();
+  const { login, isLoading } = useAuth();
   const [error, setError] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  const handlePinComplete = (pin: string) => {
-    const success = login(pin);
+  const handlePinComplete = async (pin: string) => {
+    // Don't attempt login if already in progress
+    if (isLoading) return;
+    
+    const success = await login(pin);
     
     if (!success) {
       setError(true);
@@ -42,7 +45,8 @@ const Login: React.FC = () => {
         <PinInput 
           length={6} 
           onComplete={handlePinComplete} 
-          error={error} 
+          error={error}
+          disabled={isLoading}
         />
         
         {error && (
@@ -53,7 +57,7 @@ const Login: React.FC = () => {
         
         {attempts >= 3 && (
           <p className="mt-4 text-center text-gray-500 text-sm">
-            Hint: The default PIN is XOXOXO
+            Hint: Contact your administrator for the PIN
           </p>
         )}
         

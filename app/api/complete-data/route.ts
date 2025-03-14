@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { batchProcessRows } from '../../lib/openaiUtils';
 import OpenAI from 'openai';
 
-// Initialize OpenAI client directly in the route for more control
+// Initialize OpenAI client for server-side use only
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
-  dangerouslyAllowBrowser: true // Allow initialization even if API key is missing during build
+  apiKey: process.env.OPENAI_API_KEY || ''
 });
 
 export async function POST(request: NextRequest) {

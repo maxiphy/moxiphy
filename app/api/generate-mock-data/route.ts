@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-// Initialize OpenAI client with fallback for build-time
+// Initialize OpenAI client for server-side use only
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
-  dangerouslyAllowBrowser: true // Allow initialization even if API key is missing during build
+  apiKey: process.env.OPENAI_API_KEY || ''
 });
 
 interface ColumnDefinition {

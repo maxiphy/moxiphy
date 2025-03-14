@@ -3,6 +3,7 @@ import { toast } from 'react-hot-toast';
 import Papa from 'papaparse';
 import { CSVRow } from '../types';
 import { hasMissingValues, downloadCSV } from '../lib/csvUtils';
+import { fetchWithAuth } from '../lib/apiUtils';
 import { batchEnrichProductsWithImages } from '../lib/imageUtils';
 
 export interface ColumnConstraint {
@@ -136,8 +137,8 @@ export default function useCSVEnrichment({
         
         console.log(`Processing batch ${completedBatches + 1}/${batches.length} with ${batchData.length} rows`);
         
-        // Call API to complete this batch
-        const response = await fetch('/api/complete-data', {
+        // Call API to complete this batch with authentication
+        const response = await fetchWithAuth('/api/complete-data', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

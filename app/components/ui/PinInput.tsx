@@ -6,9 +6,10 @@ interface PinInputProps {
   length: number;
   onComplete: (pin: string) => void;
   error?: boolean;
+  disabled?: boolean;
 }
 
-const PinInput: React.FC<PinInputProps> = ({ length, onComplete, error = false }) => {
+const PinInput: React.FC<PinInputProps> = ({ length, onComplete, error = false, disabled = false }) => {
   const [pin, setPin] = useState<string[]>(Array(length).fill(''));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   
@@ -117,7 +118,8 @@ const PinInput: React.FC<PinInputProps> = ({ length, onComplete, error = false }
           onPaste={handlePaste}
           className={`w-12 h-14 text-center text-2xl font-bold border-2 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008DC1] text-gray-900 ${
             error ? 'border-red-500' : 'border-gray-300'
-          }`}
+          } ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+          disabled={disabled}
           autoComplete="off"
         />
       ))}

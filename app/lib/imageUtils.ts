@@ -1,5 +1,6 @@
 // Import types
 import { CSVRow } from '../types';
+import { fetchWithAuth } from './apiUtils';
 
 // Define image result interface
 export interface ImageResult {
@@ -20,8 +21,8 @@ export interface ImageResult {
  */
 export async function fetchImagesFromAPI(query: string): Promise<ImageResult[]> {
   try {
-    // Call the API route to fetch images
-    const response = await fetch('/api/fetch-images', {
+    // Call the API route to fetch images with authentication
+    const response = await fetchWithAuth('/api/fetch-images', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
