@@ -1,12 +1,15 @@
 # Moxiphy: CSV Completion & Enrichment Tool
 
 <p align="center">
-  <img src="public/moxiphy-logo.png" alt="Moxiphy Logo" width="120" />
+  <img src="public/moxiphy-logo-new.svg" alt="Moxiphy Logo" width="80" />
+</p>
+<p align="center">
+  <img src="public/moxiphy-screenshot.png" alt="Moxiphy Screenshot" />
 </p>
 
-## About Moxiphy
+## About Moxiphy (mock + maxiphy)
 
-Moxiphy is a powerful data enrichment tool developed by [Maxiphy Solutions](https://maxiphy.com), a UX-driven software company specializing in innovative digital solutions. This tool streamlines the process of completing and enhancing product data for e-commerce and inventory management systems.
+Moxiphy is a powerful data enrichment tool developed by [maxiphy](https://maxiphy.com), a UX-driven software company specializing in innovative digital solutions focusing on user experience first. This tool streamlines the process of completing and enhancing mock data csv for any given use case.
 
 With Moxiphy, you can transform incomplete CSV datasets into rich, detailed product information using AI-powered completion and image enrichment capabilities. The application leverages OpenAI's advanced language models to intelligently fill in missing data fields and integrates with image APIs to automatically source relevant product visuals.
 
@@ -150,7 +153,7 @@ Visit [maxiphy.com](https://maxiphy.com) to learn more about our services and se
 
 ## License
 
-This project is proprietary software owned by Maxiphy Solutions SARL. © 2025 Maxiphy Solutions. All rights reserved.
+This project is proprietary software owned by [Maxiphy Solutions SARL](https://maxiphy.com). © 2025 maxiphy. All rights reserved.
 
 ## Learn More
 
