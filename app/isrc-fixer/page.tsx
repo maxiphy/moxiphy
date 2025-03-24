@@ -154,28 +154,7 @@ export default function ISRCFixer() {
       console.log(`Grouped to-fix rows into ${toFixArtistGroups.size} artist groups`);
       
       // Group catalogue rows by normalized artist name
-      const catalogueArtistGroups = new Map<string, CatalogueRow[]>();
-      
-      // Function to normalize artist names
-      const normalizeArtist = (artist: string): string => {
-        return artist.toLowerCase()
-          .replace(/[^\w\s]/g, '') // Remove special characters
-          .replace(/\s+/g, ' ')    // Normalize spaces
-          .trim();
-      };
-      
-      for (const row of catalogueData) {
-        const artist = row.Artists || '';
-        const normalizedArtist = normalizeArtist(artist);
-        
-        if (!catalogueArtistGroups.has(normalizedArtist)) {
-          catalogueArtistGroups.set(normalizedArtist, []);
-        }
-        
-        catalogueArtistGroups.get(normalizedArtist)!.push(row);
-      }
-      
-      console.log(`Grouped catalogue rows into ${catalogueArtistGroups.size} artist groups`);
+      const catalogueArtistGroups = groupCatalogueArtists(catalogueData);
       
       // Process each artist group
       const artistGroups = Array.from(toFixArtistGroups.keys());
@@ -193,13 +172,36 @@ export default function ISRCFixer() {
         const similarArtists = new Set<string>();
         similarArtists.add(normalizedArtist);
         
-        // Add artists that contain or are contained by this artist
+        // Improved artist matching for collaborations
         for (const catalogueArtist of catalogueArtistGroups.keys()) {
+          // Check for exact match
+          if (catalogueArtist === normalizedArtist) {
+            similarArtists.add(catalogueArtist);
+            continue;
+          }
+          
+          // Check for substring match (one artist contains the other)
           if (
             catalogueArtist.includes(normalizedArtist) || 
             normalizedArtist.includes(catalogueArtist)
           ) {
             similarArtists.add(catalogueArtist);
+            continue;
+          }
+          
+          // Check for word-level match (for short artist names)
+          if (normalizedArtist.length > 3 && catalogueArtist.length > 3) {
+            const artistWords = normalizedArtist.split(' ');
+            const catalogueWords = catalogueArtist.split(' ');
+            
+            // Check if any significant word matches (ignore very short words)
+            const hasWordMatch = artistWords.some(word => 
+              word.length > 3 && catalogueWords.some(cWord => cWord === word)
+            );
+            
+            if (hasWordMatch) {
+              similarArtists.add(catalogueArtist);
+            }
           }
         }
         
@@ -337,28 +339,7 @@ export default function ISRCFixer() {
       console.log(`Grouped to-fix rows into ${toFixArtistGroups.size} artist groups`);
       
       // Group catalogue rows by normalized artist name
-      const catalogueArtistGroups = new Map<string, CatalogueRow[]>();
-      
-      // Function to normalize artist names
-      const normalizeArtist = (artist: string): string => {
-        return artist.toLowerCase()
-          .replace(/[^\w\s]/g, '') // Remove special characters
-          .replace(/\s+/g, ' ')    // Normalize spaces
-          .trim();
-      };
-      
-      for (const row of catalogueData) {
-        const artist = row.Artists || '';
-        const normalizedArtist = normalizeArtist(artist);
-        
-        if (!catalogueArtistGroups.has(normalizedArtist)) {
-          catalogueArtistGroups.set(normalizedArtist, []);
-        }
-        
-        catalogueArtistGroups.get(normalizedArtist)!.push(row);
-      }
-      
-      console.log(`Grouped catalogue rows into ${catalogueArtistGroups.size} artist groups`);
+      const catalogueArtistGroups = groupCatalogueArtists(catalogueData);
       
       // Process each artist group
       const artistGroups = Array.from(toFixArtistGroups.keys());
@@ -376,13 +357,36 @@ export default function ISRCFixer() {
         const similarArtists = new Set<string>();
         similarArtists.add(normalizedArtist);
         
-        // Add artists that contain or are contained by this artist
+        // Improved artist matching for collaborations
         for (const catalogueArtist of catalogueArtistGroups.keys()) {
+          // Check for exact match
+          if (catalogueArtist === normalizedArtist) {
+            similarArtists.add(catalogueArtist);
+            continue;
+          }
+          
+          // Check for substring match (one artist contains the other)
           if (
             catalogueArtist.includes(normalizedArtist) || 
             normalizedArtist.includes(catalogueArtist)
           ) {
             similarArtists.add(catalogueArtist);
+            continue;
+          }
+          
+          // Check for word-level match (for short artist names)
+          if (normalizedArtist.length > 3 && catalogueArtist.length > 3) {
+            const artistWords = normalizedArtist.split(' ');
+            const catalogueWords = catalogueArtist.split(' ');
+            
+            // Check if any significant word matches (ignore very short words)
+            const hasWordMatch = artistWords.some(word => 
+              word.length > 3 && catalogueWords.some(cWord => cWord === word)
+            );
+            
+            if (hasWordMatch) {
+              similarArtists.add(catalogueArtist);
+            }
           }
         }
         
@@ -509,19 +513,113 @@ export default function ISRCFixer() {
         .trim();
     };
     
-    // Group to-fix rows by normalized artist name
-    for (const row of toFixData) {
-      const artist = row.artist || '';
-      const normalizedArtist = normalizeArtist(artist);
+    // Function to split collaborating artists
+    const splitCollaboratingArtists = (artist: string): string[] => {
+      // Common collaboration indicators
+      const collaborationIndicators = [
+        ' and ', ' & ', ' feat. ', ' ft. ', ' featuring ', ' with ', ' vs ', ' versus ', ' x ', ' + '
+      ];
       
-      if (!toFixArtistGroups.has(normalizedArtist)) {
-        toFixArtistGroups.set(normalizedArtist, []);
+      let normalizedArtist = normalizeArtist(artist);
+      let artists = [normalizedArtist]; // Start with the full artist name
+      
+      // Split by collaboration indicators
+      for (const indicator of collaborationIndicators) {
+        const newArtists: string[] = [];
+        
+        for (const currentArtist of artists) {
+          if (currentArtist.includes(indicator)) {
+            // Split by this indicator and normalize each part
+            const parts = currentArtist.split(indicator).map(part => normalizeArtist(part));
+            newArtists.push(...parts);
+          } else {
+            newArtists.push(currentArtist);
+          }
+        }
+        
+        artists = newArtists;
       }
       
-      toFixArtistGroups.get(normalizedArtist)!.push(row);
+      // Remove duplicates and empty strings
+      return [...new Set(artists)].filter(a => a.length > 0);
+    };
+    
+    // Group to-fix rows by normalized artist name and by individual artists in collaborations
+    for (const row of toFixData) {
+      const artist = row.artist || '';
+      const artistVariations = splitCollaboratingArtists(artist);
+      
+      // Add the row to each artist's group
+      for (const artistVariation of artistVariations) {
+        if (!toFixArtistGroups.has(artistVariation)) {
+          toFixArtistGroups.set(artistVariation, []);
+        }
+        
+        toFixArtistGroups.get(artistVariation)!.push(row);
+      }
     }
     
     return toFixArtistGroups;
+  };
+
+  // Function to group catalogue rows by artist, handling collaborations
+  const groupCatalogueArtists = (catalogueData: CatalogueRow[]) => {
+    const catalogueArtistGroups = new Map<string, CatalogueRow[]>();
+    
+    // Function to normalize artist names
+    const normalizeArtist = (artist: string): string => {
+      return artist.toLowerCase()
+        .replace(/[^\w\s]/g, '') // Remove special characters
+        .replace(/\s+/g, ' ')    // Normalize spaces
+        .trim();
+    };
+    
+    // Function to split collaborating artists
+    const splitCollaboratingArtists = (artist: string): string[] => {
+      // Common collaboration indicators
+      const collaborationIndicators = [
+        ' and ', ' & ', ' feat. ', ' ft. ', ' featuring ', ' with ', ' vs ', ' versus ', ' x ', ' + '
+      ];
+      
+      let normalizedArtist = normalizeArtist(artist);
+      let artists = [normalizedArtist]; // Start with the full artist name
+      
+      // Split by collaboration indicators
+      for (const indicator of collaborationIndicators) {
+        const newArtists: string[] = [];
+        
+        for (const currentArtist of artists) {
+          if (currentArtist.includes(indicator)) {
+            // Split by this indicator and normalize each part
+            const parts = currentArtist.split(indicator).map(part => normalizeArtist(part));
+            newArtists.push(...parts);
+          } else {
+            newArtists.push(currentArtist);
+          }
+        }
+        
+        artists = newArtists;
+      }
+      
+      // Remove duplicates and empty strings
+      return [...new Set(artists)].filter(a => a.length > 0);
+    };
+    
+    for (const row of catalogueData) {
+      const artist = row.Artists || '';
+      const artistVariations = splitCollaboratingArtists(artist);
+      
+      // Add the row to each artist's group
+      for (const artistVariation of artistVariations) {
+        if (!catalogueArtistGroups.has(artistVariation)) {
+          catalogueArtistGroups.set(artistVariation, []);
+        }
+        
+        catalogueArtistGroups.get(artistVariation)!.push(row);
+      }
+    }
+    
+    return catalogueArtistGroups;
   };
 
   // Function to pause matching
