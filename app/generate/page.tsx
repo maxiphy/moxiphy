@@ -72,6 +72,7 @@ export default function GeneratePage() {
             tabs={[
               { name: 'Complete & Enrich', href: '/', current: false },
               { name: 'Generate Mock Data', href: '/generate', current: true },
+              { name: 'ISRC Fixer', href: '/isrc-fixer', current: false },
             ]}
           />
         </div>
@@ -115,7 +116,7 @@ export default function GeneratePage() {
             <Logo size="sm" withText={true} />
           </div>
           <p>Powered by Next.js, OpenAI, and Pexels</p>
-          <p>Software property of © {new Date().getFullYear()} Maxiphy Solutions SARL</p>
+          <p>Software property of {new Date().getFullYear()} Maxiphy Solutions SARL</p>
         </div>
       </div>
     </div>

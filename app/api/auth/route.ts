@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     
     // Verify the PIN
     if (pin !== CORRECT_PIN) {
+      console.log('Invalid PIN attempt');
       return NextResponse.json(
         { error: 'Invalid PIN' },
         { status: 401 }
@@ -37,9 +38,18 @@ export async function POST(req: NextRequest) {
     
     // Store the token
     validTokens.add(token);
+    console.log(`Auth: New token created. Valid tokens count: ${validTokens.size}`);
     
-    // Return the token to the client
-    return NextResponse.json({ token });
+    // Set a cookie with the token for API authentication
+    const response = NextResponse.json({ token });
+    response.cookies.set('auth', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+    });
+    
+    return response;
   } catch (error) {
     console.error('Authentication error:', error);
     return NextResponse.json(
@@ -76,5 +86,10 @@ export async function DELETE(req: NextRequest) {
 // Helper function to verify a token
 // This can be used by other API routes to verify authentication
 export function verifyToken(token: string): boolean {
+  console.log('Verifying token:', { 
+    token: token.substring(0, 5) + '...',
+    validTokensCount: validTokens.size,
+    isValid: validTokens.has(token)
+  });
   return validTokens.has(token);
 }

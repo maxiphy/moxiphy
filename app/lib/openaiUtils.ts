@@ -152,7 +152,7 @@ export async function batchProcessRows(
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful assistant for Moxiphy, a tool that generates and enhances mock data for Maxiphy company. Complete missing data in CSV files with realistic values. Your response must be valid JSON with an array of objects, each containing rowIndex and fields properties. The rowIndex must match the index provided in the request, and fields should be an object with keys matching the missing field names and values being your completions.',
+          content: 'You are a helpful assistant for Moxiphy, a tool that generates and enhances mock data for Maxiphy company. Complete missing data in CSV files with realistic values. Your response must be valid JSON with an array of objects, each containing rowIndex and fields properties. The rowIndex must match the index provided in the request, and fields should be an object with keys matching the missing field names and values being your suggestions.',
         },
         {
           role: 'user',

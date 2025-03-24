@@ -86,6 +86,7 @@ export default function Home() {
             tabs={[
               { name: 'Complete & Enrich', href: '/', current: true },
               { name: 'Generate Mock Data', href: '/generate', current: false },
+              { name: 'ISRC Fixer', href: '/isrc-fixer', current: false },
             ]}
           />
         </div>
@@ -192,7 +193,7 @@ export default function Home() {
             <Logo size="sm" withText={true} />
           </div>
           <p>Powered by Next.js, OpenAI, and Pexels</p>
-          <p>Software property of © {new Date().getFullYear()} Maxiphy Solutions SARL</p>
+          <p>Software property of &copy; {new Date().getFullYear()} Maxiphy Solutions SARL</p>
         </div>
       </div>
     </div>
